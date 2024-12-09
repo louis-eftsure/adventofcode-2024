@@ -38,24 +38,31 @@ public class Lab
     public int GetPathLoopOptions(Guard guard)
     {
         var options = 0;
-        var routeSteps = guard.CalculateExitPath(GetGuardPosition(), Tiles);
-
-        Parallel.For(1, routeSteps.Count, i =>
+        var routeSteps = guard.CalculateExitPath(GetGuardPosition(), Tiles, out _);
+        
+        foreach(var move in routeSteps)
         {
-            var step = routeSteps[i];
-            var testLayout = Tiles.Clone() as ITile[,];
-            testLayout[step.Y, step.X] = new LoopObstacle();
-            if (HasInfiniteLoop(guard, testLayout))
+            var tempTile = Tiles[move.Coordinate.Y, move.Coordinate.X];
+            Tiles[move.Coordinate.Y, move.Coordinate.X] = new LoopObstacle();
+            if (HasInfiniteLoop(guard, Tiles))
                 options++;
-        });
+            Tiles[move.Coordinate.Y, move.Coordinate.X] = tempTile;
+        }
+        // Parallel.ForEach(routeSteps, move =>
+        // {
+        //     var tilesClone = Tiles.Clone() as ITile[,];
+        //     tilesClone[move.Y, move.X] = new LoopObstacle();
+        //     if (HasInfiniteLoop(guard, tilesClone))
+        //         Interlocked.Increment(ref options);
+        // });
         
         return options;
     }
     
-    public bool HasInfiniteLoop(Guard guard, ITile?[,]? testLayout)
+    public bool HasInfiniteLoop(Guard guard, ITile[,] testLayout)
     {
-        var routeSteps = guard.CalculateExitPath(GetGuardPosition(), testLayout);
-        return routeSteps.Count == 0;
+        var route = guard.CalculateExitPath(_guardPosition, testLayout, out var isLoop);
+        // MapUtilities.VisualiseRoute(route, testLayout);
+        return isLoop;
     }
-    
 }
