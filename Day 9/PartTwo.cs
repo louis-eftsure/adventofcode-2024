@@ -5,8 +5,9 @@ public class PartTwo
     public async Task<double> GetResult(string inputFileName)
     {
         var inputString = await File.ReadAllTextAsync(inputFileName);
-
-
-        return inputString.Length;
+        var diskMap = new DiskMap(inputString);
+        diskMap.Defrag();
+    
+        return diskMap.GetDiskMapChecksum();
     }
 }
