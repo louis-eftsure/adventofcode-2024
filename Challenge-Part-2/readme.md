@@ -1,1 +1,0 @@
-This project contains the simplified solution for day one, part two, which can be found here: https://adventofcode.com/2024/day/1
