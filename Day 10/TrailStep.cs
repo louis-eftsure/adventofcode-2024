@@ -4,18 +4,18 @@ namespace Day_10;
 
 public class TrailStep
 {
-    public TrailStep(Coordinate coordinate, int step)
+    public TrailStep(Vector2 vector2, int step)
     {
-        Coordinate = coordinate;
+        Vector2 = vector2;
         Step = step;
     }
 
-    public Coordinate Coordinate { get; }
+    public Vector2 Vector2 { get; }
     public int Step { get; }
     
     public override string ToString()
     {
-        return $"Coordinate: {Coordinate}, Step: {Step}";
+        return $"Coordinate: {Vector2}, Step: {Step}";
     }
     
     public override bool Equals(object? obj)
@@ -26,11 +26,11 @@ public class TrailStep
         }
 
         var step = (TrailStep) obj;
-        return Coordinate.Equals(step.Coordinate) && Step == step.Step;
+        return Vector2.Equals(step.Vector2) && Step == step.Step;
     }
     
     public override int GetHashCode()
     {
-        return Coordinate.GetHashCode() + Step.GetHashCode();
+        return Vector2.GetHashCode() + Step.GetHashCode();
     }
 }

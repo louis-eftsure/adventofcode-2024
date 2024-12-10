@@ -6,8 +6,8 @@ namespace Day_6;
 public class Lab
 {
     public ITile?[,]? Tiles { get; }
-    public Coordinate Size { get; }
-    private Coordinate _guardPosition { get; }
+    public Vector2 Size { get; }
+    private Vector2 _guardPosition { get; }
     public Lab(char[][] lab)
     {
         Tiles = new ITile[lab.Length, lab[0].Length];
@@ -17,7 +17,8 @@ public class Lab
             {
                 if(lab[y][x] == '^')
                 {
-                    _guardPosition = new Coordinate(x, y);
+                    _guardPosition = new Vector2(x, y);
+                    Tiles[y, x] = new Guard();
                     continue;
                 }
                 Tiles[y,x] = lab[y][x] switch
@@ -28,36 +29,33 @@ public class Lab
             }
         }
         
-        Size = new Coordinate(lab[0].Length, lab.Length);
+        Size = new Vector2(lab[0].Length, lab.Length);
     }
     
-    public Coordinate GetGuardPosition()
+    public Vector2 GetGuardPosition()
     {
         return _guardPosition;
     }
 
-    public int GetPathLoopOptions(Guard guard)
+    public List<Vector2> GetPathLoopOptions(Guard guard)
     {
-        var options = 0;
+        var options = new List<Move>();
         var routeSteps = guard.CalculateExitPath(GetGuardPosition(), Tiles, out _);
         
-        // foreach(var move in routeSteps)
-        // {
-        //     var tempTile = Tiles[move.Coordinate.Y, move.Coordinate.X];
-        //     Tiles[move.Coordinate.Y, move.Coordinate.X] = new LoopObstacle();
-        //     if (HasInfiniteLoop(guard, Tiles))
-        //         options++;
-        //     Tiles[move.Coordinate.Y, move.Coordinate.X] = tempTile;
-        // }
-        Parallel.ForEach(routeSteps, move =>
+        foreach(var move in routeSteps)
         {
-            var tilesClone = Tiles.Clone() as ITile[,];
-            tilesClone[move.Y, move.X] = new LoopObstacle();
-            if (HasInfiniteLoop(guard, tilesClone))
-                Interlocked.Increment(ref options);
-        });
+            var tempTile = Tiles[move.Y, move.X];
+            
+            if(tempTile is Guard)
+                continue;
+            
+            Tiles[move.Y, move.X] = new LoopObstacle();
+            if (HasInfiniteLoop(guard, Tiles) && !options.Exists(timeObstacle => timeObstacle == move))
+                options.Add(move);
+            Tiles[move.Y, move.X] = tempTile;
+        }
         
-        return options;
+        return options.Select(Move.ToVector2).Distinct().ToList();
     }
     
     public bool HasInfiniteLoop(Guard guard, ITile[,] testLayout)

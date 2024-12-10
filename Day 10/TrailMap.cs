@@ -18,7 +18,7 @@ public class TrailMap
 
                 if (trailStepValue == 0)
                 {
-                    Trails.Add(new Trail(new TrailStep(new Coordinate(x, y), trailStepValue)));
+                    Trails.Add(new Trail(new TrailStep(new Vector2(x, y), trailStepValue)));
                 }
             }
         }
@@ -76,11 +76,11 @@ public class TrailMap
         var result = new List<TrailStep>();
         foreach(var direction in Directions.CardinalDirections)
         {
-            var x = currentStep.Coordinate.X + direction.X;
-            var y = currentStep.Coordinate.Y + direction.Y;
+            var x = currentStep.Vector2.X + direction.X;
+            var y = currentStep.Vector2.Y + direction.Y;
             if (x >= 0 && x < CharMap.GetLength(1) && y >= 0 && y < CharMap.GetLength(0))
             {
-                result.Add(new TrailStep(new Coordinate(x, y), CharMap[y, x]));
+                result.Add(new TrailStep(new Vector2(x, y), CharMap[y, x]));
             }
         }
         

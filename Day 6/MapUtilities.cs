@@ -1,10 +1,11 @@
+using Common;
 using Day_6.Tiles;
 
 namespace Day_6;
 
 public static class MapUtilities
 {
-    public static void VisualiseRoute(List<Move> route, ITile[,] labLayout)
+    public static void  VisualiseRoute(List<Move> route, ITile[,] labLayout)
     {
         Console.Clear();
         Console.WriteLine();
@@ -22,24 +23,25 @@ public static class MapUtilities
                     continue;
                 }
                 
-                var matchingMoves = route.Count(routeMove => routeMove.X == x && routeMove.Y == y);
-                if (matchingMoves > 0)
+                var matchingMoves = route.Where(routeMove => routeMove.X == x && routeMove.Y == y).ToList();
+                var matchingMovesCount = matchingMoves.Count;
+                if (matchingMovesCount > 0)
                 {
                     //set blue
 
-                    if (matchingMoves == 1)
+                    if (matchingMovesCount == 1)
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                     }
-                    else if(matchingMoves == 2)
+                    else if(matchingMovesCount == 2)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    else if(matchingMoves == 3)
+                    else if(matchingMovesCount == 3)
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
-                    else if(matchingMoves == 4)
+                    else if(matchingMovesCount == 4)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
@@ -47,8 +49,20 @@ public static class MapUtilities
                     {
                         Console.ForegroundColor = ConsoleColor.Magenta;
                     }
-                    
-                    Console.Write('X');
+
+                    var directionsOnTile = matchingMoves.GroupBy(x => x.Direction).ToList();
+                    switch (directionsOnTile.Count)
+                    {
+                        case 1 when directionsOnTile[0].Key == Directions.North || directionsOnTile[0].Key == Directions.South:
+                            Console.Write('|');
+                            break;
+                        case 1 when directionsOnTile[0].Key == Directions.West || directionsOnTile[0].Key == Directions.East:
+                            Console.Write('-');
+                            break;
+                        case >1:
+                            Console.Write('+');
+                            break;
+                    }
                     Console.ResetColor();
                 }
                 else
