@@ -1,4 +1,4 @@
-namespace Day_6;
+namespace Common;
 
 public class Coordinate
 {

@@ -1,3 +1,5 @@
+using Common;
+
 namespace Day_6.Tiles;
 
 public class Guard : ITile
