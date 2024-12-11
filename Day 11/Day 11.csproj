@@ -24,9 +24,12 @@
 
     <ItemGroup>
       <None Update="Inputs\example-input.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Inputs\input.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Outputs\puzzle-output.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
