@@ -12,4 +12,12 @@ public class PartTwoTests
         var stones = new Stones(input);
         stones.Blink(75).ShouldBe(218811774248729d);
     }
+    
+    [Fact]
+    public async Task ExampleInput()
+    {
+        var input = await File.ReadAllTextAsync("Inputs/example-input.txt");
+        var stones = new Stones(input);
+        stones.Blink(25).ShouldBe(55312d);
+    }
 }
