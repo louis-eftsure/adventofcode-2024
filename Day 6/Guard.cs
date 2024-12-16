@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Numerics;
 using Common;
 using Day_6.Tiles;
 
@@ -17,7 +18,7 @@ public class Guard : ITile
         
         var currentMove = new Move(guardPosition, CurrentFacingDirection);
         
-        while (Vector2.IsInBounds(labSize, currentMove))
+        while (Vector2Extensions.IsInBounds(labSize, currentMove.MoveVector2))
         {
             var count = visitedPositionsCount.AddOrUpdate(currentMove, 1, (_, c) => c + 1);
             
@@ -27,7 +28,7 @@ public class Guard : ITile
                 break;
             }
             
-            if (labLayout[currentMove.Y, currentMove.X] is Obstacle or LoopObstacle)
+            if (labLayout[(int)currentMove.MoveVector2.Y, (int)currentMove.MoveVector2.X] is Obstacle or LoopObstacle)
             {
                 currentMove = new Move(currentMove.Position, GetNewTargetDirection(currentMove.Direction));
                 continue;

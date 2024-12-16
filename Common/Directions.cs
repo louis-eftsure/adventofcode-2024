@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Common;
 
 public static class Directions
@@ -21,4 +23,16 @@ public static class Directions
     {
         North, East, South, West
     };
+    
+    public static Vector2 CharToDirection(char direction)
+    {
+        return direction switch
+        {
+            '^' => North,
+            'v' => South,
+            '>' => East,
+            '<' => West,
+            _ => new Vector2(0, 0)
+        };
+    }
 }

@@ -1,18 +1,22 @@
+using System.Numerics;
 using Common;
 
 namespace Day_6;
 
-public class Move : Vector2
+public class Move
 {
-    public Move(Vector2 position, Vector2 direction): base(position.X + direction.X, position.Y+ direction.Y)
+    public Vector2 MoveVector2 { get; set; }
+    public Move(Vector2 position, Vector2 direction)
     {
+        MoveVector2 = new Vector2(position.X + direction.X, position.Y + direction.Y);
         Position = position;
         Direction = direction;
     }
     
-    public Move(Move coordinate, Vector2 direction): base(coordinate.X + direction.X, coordinate.Y+ direction.Y)
+    public Move(Move move, Vector2 direction)
     {
-        Position = new Vector2(coordinate.X, coordinate.Y);
+        MoveVector2 = new Vector2(move.MoveVector2.X + direction.X, move.MoveVector2.Y + direction.Y);
+        Position = new Vector2(move.MoveVector2.X, move.MoveVector2.Y);
         Direction = direction;
     }
 
@@ -40,5 +44,5 @@ public class Move : Vector2
         return Position.GetHashCode() + Direction.GetHashCode();
     }
     
-    public static Vector2 ToVector2(Move move) => new(move.X, move.Y);
+    public static Vector2 ToVector2(Move move) => new(move.MoveVector2.X, move.MoveVector2.Y);
 }

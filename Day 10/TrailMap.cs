@@ -1,3 +1,4 @@
+using System.Numerics;
 using Common;
 
 namespace Day_10;

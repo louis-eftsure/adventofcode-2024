@@ -1,3 +1,4 @@
+using System.Numerics;
 using Common;
 using Day_6.Tiles;
 
@@ -44,15 +45,15 @@ public class Lab
         
         foreach(var move in routeSteps)
         {
-            var tempTile = Tiles[move.Y, move.X];
+            var tempTile = Tiles[(int)move.MoveVector2.Y, (int)move.MoveVector2.X];
             
             if(tempTile is Guard)
                 continue;
             
-            Tiles[move.Y, move.X] = new LoopObstacle();
+            Tiles[(int)move.MoveVector2.Y, (int)move.MoveVector2.X] = new LoopObstacle();
             if (HasInfiniteLoop(guard, Tiles) && !options.Exists(timeObstacle => timeObstacle == move))
                 options.Add(move);
-            Tiles[move.Y, move.X] = tempTile;
+            Tiles[(int)move.MoveVector2.Y, (int)move.MoveVector2.X] = tempTile;
         }
         
         return options.Select(Move.ToVector2).Distinct().ToList();
